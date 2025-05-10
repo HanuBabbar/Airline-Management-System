@@ -2,7 +2,7 @@
   {
     "name": "Lovepreet Singh",
     "password": "12345",
-    "hashed_password": "$2a$10$MqonEcizso4Re9iFEMajHOIHCUd5O3Q.XZX779C50ZnC/Hb6mirwW",
+    "hashed_password": "$3a$10$MqonEcizso4Re9iFEMajHOIHCUd5O3Q.XZX779C50ZnC/Hb6mirwW",
     "tickets_booked": [
       {
         "ticket_id": "your_ticket_id",

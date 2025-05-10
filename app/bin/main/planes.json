@@ -17,7 +17,8 @@
       "bangalore",
       "mumbai",
       "delhi"
-    ]
+    ],
+    "plane_info": "Plane ID: plane_a1, Plane No: AI202"
   },
   {
     "plane_id": "plane_b7",
@@ -37,6 +38,7 @@
       "chennai",
       "hyderabad",
       "kolkata"
-    ]
+    ],
+    "plane_info": "Plane ID: plane_b7, Plane No: 6E404"
   }
 ]

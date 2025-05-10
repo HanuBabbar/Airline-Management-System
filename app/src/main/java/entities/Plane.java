@@ -4,21 +4,32 @@ import java.sql.Time;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Plane {
 
+    @JsonProperty("plane_id")
     private String planeId;
 
+    @JsonProperty("plane_no")
     private String planeNumber;
 
     private List<List<Integer>> seats;
 
+    @JsonProperty("airport_times")
     private Map<String, Time> airportTimes;
 
     private List<String> airports;
 
-    public Plane(){}
+    @JsonProperty("plane_info")
+    private String planeInfo;
 
-    public Plane(String planeId, String planeNumber, List<List<Integer>> seats, Map<String, Time> airportTimes, List<String> airports){
+    public Plane() {
+    }
+
+    public Plane(String planeId, String planeNumber, List<List<Integer>> seats, Map<String, Time> airportTimes,
+            List<String> airports) {
         this.planeId = planeId;
         this.planeNumber = planeNumber;
         this.seats = seats;
@@ -26,8 +37,7 @@ public class Plane {
         this.airports = airports;
     }
 
-
-    public List<String> getAirports(){
+    public List<String> getAirports() {
         return airports;
     }
 
@@ -35,41 +45,44 @@ public class Plane {
         return seats;
     }
 
-    public void setSeats(List<List<Integer>> seats){
+    public void setSeats(List<List<Integer>> seats) {
         this.seats = seats;
     }
 
-    public String getPlaneId(){
+    public String getPlaneId() {
         return planeId;
     }
 
-    public Map<String, Time> getAirportTimes(){
+    public Map<String, Time> getAirportTimes() {
         return airportTimes;
     }
 
-    public String getPlaneNumber(){
+    public String getPlaneNumber() {
         return planeNumber;
     }
 
-    public void setPlaneId(String planeId){
+    public void setPlaneId(String planeId) {
         this.planeId = planeId;
     }
 
-    public void setPlaneNumber(String planeNumber){
+    public void setPlaneNumber(String planeNumber) {
         this.planeNumber = planeNumber;
     }
 
-    public void setAirportTimes(Map<String, Time> airportTimes){
+    public void setAirportTimes(Map<String, Time> airportTimes) {
         this.airportTimes = airportTimes;
     }
 
-    public void setAirports(List<String> airports){
+    public void setAirports(List<String> airports) {
         this.airports = airports;
     }
 
-    public String getPlaneInfo(){
-        return String.format("Plane ID: %s Plane No: %s", planeId, planeNumber);
+    public void setPlaneInfo(String planeInfo) {
+        this.planeInfo = planeInfo;
     }
 
+    public String getPlaneInfo() {
+        return planeInfo;
+    }
 
 }
