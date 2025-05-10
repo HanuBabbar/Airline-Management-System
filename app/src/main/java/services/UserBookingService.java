@@ -24,11 +24,15 @@ public class UserBookingService {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String users_path = "users.json";
+    private static final String USERS_PATH = "app/src/main/resources/users.json";
 
     public UserBookingService(User user) throws IOException {
         this.user = user;
         loadUserListFromFile();
+    }
+
+    public User user(){
+        return user;
     }
 
     public UserBookingService() throws IOException {
@@ -36,13 +40,9 @@ public class UserBookingService {
     }
 
     private void loadUserListFromFile() throws IOException {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(users_path);
-        if (inputStream == null) {
-            throw new FileNotFoundException("users.json not found in resources");
-        }
 
         ObjectMapper objectMapper = new ObjectMapper();
-        userList = objectMapper.readValue(inputStream, new TypeReference<List<User>>() {
+        userList = objectMapper.readValue(new File(USERS_PATH), new TypeReference<List<User>>() {
         });
     }
 
@@ -65,11 +65,15 @@ public class UserBookingService {
     }
 
     private void saveUserListToFile() throws IOException {
-        File usersFile = new File(users_path);
+        File usersFile = new File(USERS_PATH);
         objectMapper.writeValue(usersFile, userList);
     }
 
     public void fetchBookings() {
+        if(user==null){
+            System.out.println("Please Log In to fetch your bookings");
+            return;
+        }
         Optional<User> userFetched = userList.stream().filter(user1 -> {
             return user1.getName().equals(user.getName())
                     && UserServiceUtil.checkPassword(user.getPassword(), user1.getHashedPassword());

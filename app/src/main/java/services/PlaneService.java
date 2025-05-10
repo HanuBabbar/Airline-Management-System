@@ -18,11 +18,11 @@ public class PlaneService {
 
     private List<Plane> planeList;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private static final String planes_path = "../local.db/planes.json";
+    private static final String PLANES_PATH = "app/src/main/resources/planes.json";
 
     public PlaneService() throws IOException {
 
-        File planes = new File(planes_path);
+        File planes = new File(PLANES_PATH);
         planeList = objectMapper.readValue(planes, new TypeReference<List<Plane>>() {
         });
     }
@@ -61,7 +61,7 @@ public class PlaneService {
 
     private void savePlaneListToFile(){
         try{
-            objectMapper.writeValue(new File(planes_path), planeList);
+            objectMapper.writeValue(new File(PLANES_PATH), planeList);
         }catch (IOException e){
             e.printStackTrace(); //handles exception
         }

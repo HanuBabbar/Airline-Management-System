@@ -10,7 +10,7 @@ import java.util.*;
 public class App {
 
     public static void main(String[] args){
-        System.out.println("Runnin Airplane booking system");
+        System.out.println("Running Airplane booking system");
         Scanner sc = new Scanner(System.in);
         int option = 0;
         UserBookingService userBookingService;
@@ -21,6 +21,7 @@ public class App {
             System.out.println("Something went wrong");
             return;
         }
+        Plane planeSelected = new Plane();
         while(option!=7){
             System.out.println("Choose Option");
             System.out.println("1. Sign Up");
@@ -31,7 +32,6 @@ public class App {
             System.out.println("6. Cancel a Booking");
             System.out.println("7. Exit");
             option = sc.nextInt();
-            Plane planeSelected = new Plane();
             switch (option){
                 case 1:
                     System.out.println("Enter username to signup");
@@ -63,22 +63,31 @@ public class App {
                     System.out.println("Type your destination Airport");
                     String destination = sc.next();
                     List<Plane> planes = userBookingService.getPlanes(source, destination);
-                    int index = 1;
+                    int index = 0;
                     for(Plane p: planes){
-                        System.out.println(index+"Plane id:"+p.getPlaneId());
+                        System.out.println(index+" Plane id: "+p.getPlaneId());
                         for(Map.Entry<String, Time> entry : p.getAirportTimes().entrySet()){
                             System.out.println("Airport "+entry.getKey()+" Time: "+entry.getValue());
                         }
+                        index++;
                     }
                     System.out.println("Enter what flight you wanna choose");
                     planeSelected = planes.get(sc.nextInt());
                     break;
                 case 5:
+                    if(userBookingService.user()==null){
+                        System.out.println("Please Login before booking a seat.");
+                        break;
+                    }
+                    if(planeSelected.getPlaneId()==null){
+                        System.out.println("Please select a flight first.");
+                        break;
+                    }
                     System.out.println("Select a seat to book");
                     List<List<Integer>> seats = userBookingService.fetchSeats(planeSelected);
                     for (List<Integer> row: seats){
                         for(Integer val: row){
-                            System.out.println(val+" ");
+                            System.out.print(val+" ");
                         }
                         System.out.println();
                     }
