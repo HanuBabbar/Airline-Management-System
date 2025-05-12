@@ -22,6 +22,8 @@ public class App {
             return;
         }
         Plane planeSelected = new Plane();
+        String source = new String();
+        String destination = new String();
         while(option!=7){
             System.out.println("Choose Option");
             System.out.println("1. Sign Up");
@@ -59,9 +61,9 @@ public class App {
                     break;
                 case 4:
                     System.out.println("Type your source Airport");
-                    String source = sc.next();
+                    source = sc.next();
                     System.out.println("Type your destination Airport");
-                    String destination = sc.next();
+                    destination = sc.next();
                     List<Plane> planes = userBookingService.getPlanes(source, destination);
                     int index = 0;
                     for(Plane p: planes){
@@ -97,7 +99,7 @@ public class App {
                     System.out.println("Enter column");
                     int column = sc.nextInt();
                     System.out.println("Booking your seat");
-                    Boolean booked = userBookingService.bookSeat(planeSelected, row, column);
+                    Boolean booked = userBookingService.bookSeat(planeSelected, row, column, source, destination);
                     if(booked.equals(Boolean.TRUE)){
                         System.out.println("Your seat is booked!");
                     }else {

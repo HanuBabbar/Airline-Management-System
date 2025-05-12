@@ -11,10 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class UserBookingService {
 
@@ -74,13 +71,14 @@ public class UserBookingService {
             System.out.println("Please Log In to fetch your bookings");
             return;
         }
-        Optional<User> userFetched = userList.stream().filter(user1 -> {
-            return user1.getName().equals(user.getName())
-                    && UserServiceUtil.checkPassword(user.getPassword(), user1.getHashedPassword());
-        }).findFirst();
-        if (userFetched.isPresent()) {
-            userFetched.get().printTickets();
-        }
+        user.printTickets();
+//        Optional<User> userFetched = userList.stream().filter(user1 -> {
+//            return user1.getName().equals(user.getName())
+//                    && UserServiceUtil.checkPassword(user.getPassword(), user1.getHashedPassword());
+//        }).findFirst();
+//        if (userFetched.isPresent()) {
+//            userFetched.get().printTickets();
+//        }
     }
 
     // todo complete this function
@@ -120,15 +118,32 @@ public class UserBookingService {
         return plane.getSeats();
     }
 
-    public Boolean bookSeat(Plane plane, int row, int seat) {
+    public Boolean bookSeat(Plane plane, int row, int seat, String source, String destination) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File(USERS_PATH);
+            List<User> users = objectMapper.readValue(file, new TypeReference<List<User>>() {});
+            String userIdToFind = user.getUserId();
+            Ticket ticket = new Ticket(UUID.randomUUID().toString(), user.getUserId(), source, destination, plane );
+            for (User u : users) {
+                if (u.getUserId() != null && u.getUserId().equals(user.getUserId())) {
+                    if (u.getTicketsBooked() == null) {
+                        u.setTicketsBooked(new ArrayList<>());
+                    }
+                    u.getTicketsBooked().add(ticket);
+                    break;
+                }
+            }
+
             PlaneService planeService = new PlaneService();
+
             List<List<Integer>> seats = plane.getSeats();
             if (row >= 0 && row < seats.size() && seat >= 0 && seat < seats.get(row).size()) {
                 if (seats.get(row).get(seat) == 0) {
                     seats.get(row).set(seat, 1);
                     plane.setSeats(seats);
                     planeService.addPlane(plane);
+                    objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, users);
                     return true; // booked
                 } else {
                     return false; // already booked

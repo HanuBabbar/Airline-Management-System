@@ -45,12 +45,18 @@ public class User {
 
     public void printTickets() {
         for (int i = 0; i < ticketsBooked.size(); i++) {
-            System.out.println(ticketsBooked.get(i).getTicketId());
+            System.out.println("Your booked tickets -");
+            System.out.println("Your ticket is from "+ticketsBooked.get(i).getSource()+" to "+ticketsBooked.get(i).getDestination()+" on Plane number: "+ticketsBooked.get(i).getPlane().getPlaneNumber());
         }
     }
 
     public List<Ticket> getTicketsBooked() {
+
         return ticketsBooked;
+    }
+
+    public void setTicketsBooked(List<Ticket> ticketsBooked) {
+        this.ticketsBooked = ticketsBooked;
     }
 
     public String getUserId() {
@@ -68,4 +74,6 @@ public class User {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+
 }

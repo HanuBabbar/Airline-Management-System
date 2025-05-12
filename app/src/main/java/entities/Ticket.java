@@ -16,26 +16,21 @@ public class Ticket {
 
     private String destination;
 
-    @JsonProperty("date_of_travel")
-    private String dateOfTravel;
-
     private Plane plane;
 
-    public Ticket(String ticketId, String userId, String source, String destination, String dateOfTravel, Plane Plane) {
+    public Ticket(String ticketId, String userId, String source, String destination, Plane Plane) {
         this.ticketId = ticketId;
         this.userId = userId;
         this.source = source;
         this.destination = destination;
-        this.dateOfTravel = dateOfTravel;
         this.plane = Plane;
     }
 
-    public Ticket() {
-    }
+    public Ticket(){}
 
     public String getTicketInfo() {
-        return String.format("Ticket ID: %s belongs to User %s from %s to %s on %s", ticketId, userId, source,
-                destination, dateOfTravel);
+        return String.format("Ticket ID: %s belongs to User %s from %s to %s.", ticketId, userId, source,
+                destination);
     }
 
     public String getTicketId() {
@@ -56,14 +51,6 @@ public class Ticket {
 
     public void setDestination() {
         this.destination = destination;
-    }
-
-    public String getDateOfTravel() {
-        return dateOfTravel;
-    }
-
-    public void setDateOfTravel() {
-        this.dateOfTravel = dateOfTravel;
     }
 
     public Plane getPlane() {
