@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,16 +9,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 
+    @JsonProperty("name")
     private String name;
 
+    @JsonProperty("password")
     private String password;
 
     @JsonProperty("hashed_password")
     private String hashedPassword;
 
-    @JsonProperty("tickets_booked")
+    @JsonProperty("ticketsBooked")
     private List<Ticket> ticketsBooked;
 
+    @JsonProperty("userId")
     private String userId;
 
     public User(String name, String password, String hashedPassword, List<Ticket> ticketsBooked, String userId) {
@@ -44,19 +48,28 @@ public class User {
     }
 
     public void printTickets() {
-        for (int i = 0; i < ticketsBooked.size(); i++) {
-            System.out.println("Your booked tickets -");
-            System.out.println("Your ticket is from "+ticketsBooked.get(i).getSource()+" to "+ticketsBooked.get(i).getDestination()+" on Plane number: "+ticketsBooked.get(i).getPlane().getPlaneNumber());
+        if (ticketsBooked == null || ticketsBooked.isEmpty()) {
+            System.out.println("No tickets booked.");
+        } else {
+            for (Ticket t : ticketsBooked) {
+                System.out.println(t.getTicketInfo());
+            }
         }
     }
 
     public List<Ticket> getTicketsBooked() {
-
         return ticketsBooked;
     }
 
     public void setTicketsBooked(List<Ticket> ticketsBooked) {
         this.ticketsBooked = ticketsBooked;
+    }
+
+    public void addTicket(Ticket ticket){
+        if (ticketsBooked == null) {
+            ticketsBooked = new ArrayList<>();
+        }
+        ticketsBooked.add(ticket);
     }
 
     public String getUserId() {

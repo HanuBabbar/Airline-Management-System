@@ -16,6 +16,14 @@ repositories {
 }
 
 dependencies {
+    sourceSets {
+        main {
+            resources {
+                srcDirs = ['src/main/resources']
+            }
+        }
+    }
+
     // Use JUnit test framework.
     testImplementation libs.junit
 
@@ -25,6 +33,9 @@ dependencies {
     //This dependency is used for Object mapping
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
     implementation 'org.mindrot:jbcrypt:0.4'
+    implementation 'org.mongodb:mongodb-driver-sync:4.11.0'
+    implementation 'org.json:json:20230227'
+
 
 }
 

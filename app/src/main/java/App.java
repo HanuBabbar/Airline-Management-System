@@ -48,11 +48,15 @@ public class App {
                     String nameToLogin = sc.next();
                     System.out.println("Enter password");
                     String passLogIn = sc.next();
-                    User userToLogin = new User(nameToLogin, passLogIn, UserServiceUtil.hashPassword(passLogIn), new ArrayList<>(),UUID.randomUUID().toString());
-                    try{
-                        userBookingService = new UserBookingService(userToLogin);
-                    }catch (IOException ex){
-                        return;
+                    try {
+                        userBookingService = new UserBookingService();
+                        if (userBookingService.loginUser(nameToLogin, passLogIn)) {
+                            System.out.println("Login successful!");
+                        } else {
+                            System.out.println("Invalid username or password.");
+                        }
+                    } catch (IOException ex) {
+                        System.out.println("Error loading user data.");
                     }
                     break;
                 case 3:
@@ -66,6 +70,10 @@ public class App {
                     destination = sc.next();
                     List<Plane> planes = userBookingService.getPlanes(source, destination);
                     int index = 0;
+                    if(planes.isEmpty()){
+                        System.out.println("No planes available for these airports");
+                        break;
+                    }
                     for(Plane p: planes){
                         System.out.println(index+" Plane id: "+p.getPlaneId());
                         for(Map.Entry<String, Time> entry : p.getAirportTimes().entrySet()){

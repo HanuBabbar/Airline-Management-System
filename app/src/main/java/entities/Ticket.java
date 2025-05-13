@@ -12,10 +12,13 @@ public class Ticket {
     @JsonProperty("user_id")
     private String userId;
 
+    @JsonProperty("source")
     private String source;
 
+    @JsonProperty("destination")
     private String destination;
 
+    @JsonProperty("plane")
     private Plane plane;
 
     public Ticket(String ticketId, String userId, String source, String destination, Plane Plane) {

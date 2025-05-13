@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import entities.Plane;
 import entities.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+//import util.JsonUploader;
 import util.UserServiceUtil;
 import entities.Ticket;
 
@@ -28,9 +29,14 @@ public class UserBookingService {
         loadUserListFromFile();
     }
 
-    public User user(){
+    public User user() {
         return user;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 
     public UserBookingService() throws IOException {
         loadUserListFromFile();
@@ -43,18 +49,29 @@ public class UserBookingService {
         });
     }
 
-    public Boolean loginUser() {
-        Optional<User> foundUser = userList.stream().filter(user1 -> {
-            return user1.getName().equals(user.getName())
-                    && UserServiceUtil.checkPassword(user.getPassword(), user1.getHashedPassword());
-        }).findFirst();
-        return foundUser.isPresent();
+    public Boolean loginUser(String inputName, String inputPassword) {
+        Optional<User> foundUser = userList.stream()
+                .filter(user1 -> user1.getName().equals(inputName))
+                .findFirst();
+
+        if (foundUser.isPresent()) {
+            User existingUser = foundUser.get();
+            if (UserServiceUtil.checkPassword(inputPassword, existingUser.getHashedPassword())) {
+                this.user = existingUser;
+                return true;
+            }
+        }
+
+        return false;
     }
+
+
 
     public Boolean signUp(User user1) {
         try {
             userList.add(user1);
             saveUserListToFile();
+//            JsonUploader.uploadUsersToMongo();
             return Boolean.TRUE;
         } catch (IOException ex) {
             return Boolean.FALSE;
@@ -67,7 +84,7 @@ public class UserBookingService {
     }
 
     public void fetchBookings() {
-        if(user==null){
+        if (user == null) {
             System.out.println("Please Log In to fetch your bookings");
             return;
         }
@@ -120,22 +137,8 @@ public class UserBookingService {
 
     public Boolean bookSeat(Plane plane, int row, int seat, String source, String destination) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            File file = new File(USERS_PATH);
-            List<User> users = objectMapper.readValue(file, new TypeReference<List<User>>() {});
-            String userIdToFind = user.getUserId();
-            Ticket ticket = new Ticket(UUID.randomUUID().toString(), user.getUserId(), source, destination, plane );
-            for (User u : users) {
-                if (u.getUserId() != null && u.getUserId().equals(user.getUserId())) {
-                    if (u.getTicketsBooked() == null) {
-                        u.setTicketsBooked(new ArrayList<>());
-                    }
-                    u.getTicketsBooked().add(ticket);
-                    break;
-                }
-            }
-
             PlaneService planeService = new PlaneService();
+            Ticket ticket = new Ticket(UUID.randomUUID().toString(), user.getUserId(), source, destination, plane);
 
             List<List<Integer>> seats = plane.getSeats();
             if (row >= 0 && row < seats.size() && seat >= 0 && seat < seats.get(row).size()) {
@@ -143,16 +146,33 @@ public class UserBookingService {
                     seats.get(row).set(seat, 1);
                     plane.setSeats(seats);
                     planeService.addPlane(plane);
-                    objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, users);
-                    return true; // booked
+
+                    user.addTicket(ticket);
+
+                    // Update the user in userList
+                    for (int i = 0; i < userList.size(); i++) {
+                        if (userList.get(i).getUserId().equals(user.getUserId())) {
+                            userList.set(i, user);
+                            break;
+                        }
+                    }
+
+                    saveUserListToFile();
+
+                    System.out.println("Your ticket is booked from " + source + " to " + destination +
+                            " on plane number: " + plane.getPlaneNumber());
+                    return true;
                 } else {
-                    return false; // already booked
+                    System.out.println("Seat already booked.");
+                    return false;
                 }
             } else {
-                return false; // invalid seat
+                System.out.println("Invalid seat selection.");
+                return false;
             }
         } catch (IOException ex) {
-            return Boolean.FALSE;
+            System.out.println("Error booking seat: " + ex.getMessage());
+            return false;
         }
     }
 
