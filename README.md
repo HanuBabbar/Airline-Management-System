@@ -160,8 +160,16 @@ sourceSets {
 <h2>🤝 Contributing</h2>
 
 <p>Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.</p>
+<hr>
+
+<h2>📝 License</h2>
+
+<p>This project is open source and available under the <a href="LICENSE">MIT License</a>.</p>
+
+<hr>
 
 <p><em>Built with ❤️ in Java by Hanu</em></p>
 
 </body>
-</html>
+
+
